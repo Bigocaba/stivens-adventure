@@ -1,10 +1,11 @@
 {
   "name": "stivens-adventure",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "android:add": "cap add android",
-    "android:sync": "cap sync android"
+    "android:sync": "cap sync android",
+    "capacitor:sync:after": "unzip -o icons.zip -d android/app/src/main/res || echo sin-iconos"
   },
   "dependencies": {
     "@capacitor/android": "^7.0.0",
