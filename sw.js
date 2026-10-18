@@ -1,10 +1,10 @@
-const CACHE = 'stivens-v1';
-const FILES = ['index.html', 'manifest.json', 'icon-192.png', 'icon-512.png'];
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
-  self.skipWaiting();
-});
-self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-self.addEventListener('fetch', e => {
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+// Service worker de limpieza: borra cachés viejos y se desinstala solo.
+self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(ks => Promise.all(ks.map(k => caches.delete(k))))
+      .then(() => self.registration.unregister())
+      .then(() => self.clients.matchAll())
+      .then(cs => cs.forEach(c => c.navigate(c.url)))
+  );
 });
